@@ -3,9 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>我的个人项目</title>
+    <script>
+        // 请将此处的Gist ID替换为你创建的公共Gist ID
+        const gistId = "1b7b08bd4d379344f93b08ff33bf0e5a";
+        const gistUrl = `https://api.github.com/gists/${gistId}`;
+
+        // 使用 fetch API 获取最新的 Ngrok URL
+        async function fetchAndRedirect() {
+            try {
+                const response = await fetch(gistUrl);
+                const data = await response.json();
+                
+                if (data.files && data.files["ngrok_url.json"]) {
+                    const fileContent = JSON.parse(data.files["ngrok_url.json"].content);
+                    const ngrokUrl = fileContent.url;
+
+                    if (ngrokUrl) {
+                        window.location.href = ngrokUrl;
+                    } else {
+                        document.body.innerHTML = "<p>未能获取有效的 Ngrok URL。</p>";
+                    }
+                }
+            } catch (error) {
+                document.body.innerHTML = "<p>获取 Ngrok URL 失败，请检查脚本运行状态。</p>";
+                console.error("Fetch failed:", error);
+            }
+        }
+
+        window.onload = fetchAndRedirect;
+    </script>
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <p>这是我用 GitHub Pages 托管的第一个网页。</p>
+    <p>正在获取最新的 Ngrok 地址并跳转...</p>
 </body>
 </html>
