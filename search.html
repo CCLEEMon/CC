@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索服务跳转</title>
+    <script>
+        const searchGistId = "新的搜索服务Gist_ID";
+        const gistUrl = `https://api.github.com/gists/${searchGistId}`;
+        
+        async function fetchAndRedirect() {
+            try {
+                const response = await fetch(gistUrl);
+                const data = await response.json();
+                
+                if (data.files && data.files["search_url.json"]) {
+                    const fileContent = JSON.parse(data.files["search_url.json"].content);
+                    const searchUrl = fileContent.url;
+                    
+                    // 跳转到搜索API
+                    window.location.href = searchUrl + "/search/technical_documents";
+                }
+            } catch (error) {
+                document.body.innerHTML = "<p>搜索服务连接失败</p>";
+            }
+        }
+        window.onload = fetchAndRedirect;
+    </script>
+</head>
+<body><p>正在连接搜索服务...</p></body>
+</html>
